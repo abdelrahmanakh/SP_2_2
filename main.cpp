@@ -26,71 +26,77 @@ bool is_valid_key(string keyword){
     return false;
 }
 
-//to encrypt the message using Vignere Cipher
-string vignere_cipher_encryption(string msg, string keyword){
-    string encrypted;
+//to encrypt or decrypt the message using Vignere Cipher
+void vignere_cipher(int n){
+    string encrypted, decrypted;
+    string msg, keyword;
+    cin.ignore();//ignore the last cin to not conflict with the next cin call
+    while (true) {
+        cout << "Enter your message:";
+        getline(cin, msg);//get the whole line with spaces as input
+        cout << "Enter your keyword:";
+        getline(cin, keyword);//get the whole line with spaces as input
+
+        //checking the constraints
+        if (!is_valid_key(keyword)) {
+            cout << "please enter only 8 alphabetic letters for the keyword" << endl;
+            continue;
+        }
+        if (msg.size() > 80) {
+            cout << "message size shouldn't be greater than 80 characters, please try again!!" << endl;
+            continue;
+        }
+        break;
+    }
     msg = upper(msg);
     keyword = upper(keyword);
     //loop through each letter in the message
     for (int i=0,j=0;i<msg.size();i++,j++){
         if(msg[i]<65||msg[i]>90){
-            encrypted += char(msg[i]);//if the character is not alphabetic add it to the encrypted message as it is
+            if(n==1)
+                encrypted += char(msg[i]);//if the character is not alphabetic add it to the encrypted message as it is
+            else
+                decrypted += char(msg[i]);//if the character is not alphabetic add it to the encrypted message as it is
             continue;
         }
-        encrypted += char(((msg[i]+keyword[j])%26)+65);//Vignere Cipher add the ASCII of msg[i] to corresponding keyword[i] get the modulo of that by 26 add it to 65 the ASCII of 'A'
+        if(n==1)
+            encrypted += char(((msg[i]+keyword[j])%26)+65);//Vignere Cipher add the ASCII of msg[i] to corresponding keyword[i] get the modulo of that by 26 add it to 65 the ASCII of 'A'
+        else
+            decrypted += char(((msg[i]-keyword[j]+26)%26)+65);//Vignere DeCipher subtract the ASCII of keyword[i] from msg[i], add 26, then get the modulo of that by 26 add it to 65 the ASCII of 'A'
         if (j==keyword.size()-1)
             j=-1;//if we looped through all the letters of the keyword start over
     }
-    return encrypted;
+    if(n==1)
+        cout<<encrypted<<endl;
+    else
+        cout<<decrypted<<endl;
 }
 
 
-string vignere_cipher_decryption(string msg, string keyword){
-    string decrypted;
-    msg = upper(msg);
-    keyword = upper(keyword);
-    //loop through each letter in the message
-    for (int i=0,j=0;i<msg.size();i++,j++){
-        if(msg[i]<65||msg[i]>90){
-            decrypted += char(msg[i]);//if the character is not alphabetic add it to the encrypted message as it is
-            continue;
-        }
-        decrypted += char(((msg[i]-keyword[j]+26)%26)+65);//Vignere DeCipher subtract the ASCII of keyword[i] from msg[i], add 26, then get the modulo of that by 26 add it to 65 the ASCII of 'A'
-        if (j==keyword.size()-1)
-            j=-1;//if we looped through all the letters of the keyword start over
-    }
-    return decrypted;
-}
 //user menu
 void Cipher_menu() {
+
     while (true) {
         int choice;
         cout<<"=============================================================";
         cout<< "\n1)Vignere Cipher\n2)Baconian Cipher\n3)Morse Code\n4)return\n";
-        cin>>choice;
+
+        //if the input is not integer ask print error message
+        if (!(cin >> choice)) {
+            // If input failed, clear the fail state and ignore the invalid input
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
         //user chose exit
         if (choice == 4){
             break;
         }
         else if(choice==1||choice==2||choice==3){
-            string msg, keyword, encryption;
-
-            cin.ignore();//ignore the last cin to not conflict with the next cin call
-            cout<<"Enter your message:";
-            getline(cin, msg);//get the whole line with spaces as input
-            cout<<"Enter your keyword:";
-            getline(cin, keyword);//get the whole line with spaces as input
 
             if(choice==1){//user chose Vignere Cipher
-                if(!is_valid_key(keyword)){
-                    cout<<"please enter only 8 alphabetic letters for the keyword"<<endl;
-                    continue;
-                }
-                if (msg.size()>80){
-                    cout<<"message size shouldn't be greater than 80 characters, please try again!!"<<endl;
-                    continue;
-                }
-                encryption = vignere_cipher_encryption(msg, keyword);
+                vignere_cipher(1);
             }
 
             else if(choice==2){
@@ -99,9 +105,9 @@ void Cipher_menu() {
             else if(choice==3){
 
             }
-            cout<<encryption<<endl;
         }
         else{//unexpected value
+            cout<<"Please enter 1, 2, 3 or 4"<<endl;
             continue;
         }
     }
@@ -112,30 +118,22 @@ void deCipher_menu(){
         int choice;
         cout<<"=============================================================";
         cout<< "\n1)Vignere deCipher\n2)Baconian deCipher\n3)Morse deCode\n4)return\n";
-        cin>>choice;
+        //if the input is not integer ask print error message
+        if (!(cin >> choice)) {
+            // If input failed, clear the fail state and ignore the invalid input
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
         //user chose exit
         if (choice == 4){
             break;
         }
         else if(choice==1||choice==2||choice==3){
-            string msg, keyword, decryption;
-
-            cin.ignore();//ignore the last cin to not conflict with the next cin call
-            cout<<"Enter your message:";
-            getline(cin, msg);//get the whole line with spaces as input
-            cout<<"Enter your keyword:";
-            getline(cin, keyword);//get the whole line with spaces as input
 
             if(choice==1){//user chose Vignere deCipher
-                if(!is_valid_key(keyword)){
-                    cout<<"please enter only 8 alphabetic letters for the keyword"<<endl;
-                    continue;
-                }
-                if (msg.size()>80){
-                    cout<<"message size shouldn't be greater than 80 characters, please try again!!"<<endl;
-                    continue;
-                }
-                decryption = vignere_cipher_decryption(msg, keyword);
+                vignere_cipher(2);
             }
 
             else if(choice==2){
@@ -144,9 +142,9 @@ void deCipher_menu(){
             else if(choice==3){
 
             }
-            cout<<decryption<<endl;
         }
         else{//unexpected value
+            cout<<"Please enter 1, 2, 3 or 4"<<endl;
             continue;
         }
     }
@@ -158,7 +156,14 @@ int main() {
         int choice;
         cout<<"=============================================================";
         cout << "\n1)Cipher\n2)Decipher\n3)exit\n";
-        cin >> choice;
+        //if the input is not integer ask print error message
+        if (!(cin >> choice)) {
+            // If input failed, clear the fail state and ignore the invalid input
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
         if (choice == 1)
             Cipher_menu();
         else if (choice == 2)
