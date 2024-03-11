@@ -1,2 +1,2 @@
-# SP_2_2
-Structured programing Assignment 2, task 2
+# Structure Programming
+## Assignment 2 --> Task 2
