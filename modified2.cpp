@@ -202,7 +202,7 @@ string decodeBaconCipher(const string &ciphertext) {
     return plaintext; // Return the decoded plaintext
 }
 
-// This function encrypts the message
+// This function encrypts the message in Morse form
 bool EncryptionMorse(string txt) {
     // store the new value
     string morse_text;
@@ -246,7 +246,7 @@ bool EncryptionMorse(string txt) {
 
 }
 
-// This function decrypts the message
+// This function decrypts the message in Morse form
 bool DecryptionMorse(string txt) {
 
     // store the temporary substring of the morse code to be replaced
