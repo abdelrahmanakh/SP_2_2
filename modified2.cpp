@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <cctype>
+
 using namespace std;
 
 //to convert the keyword and the message letters to uppercase
@@ -30,7 +31,7 @@ bool is_valid_key(string keyword) {
     return false;
 }
 
-//to encrypt or decrypt the message using Vignere Cipher
+//to encryptMorse or decryptMorse the message using Vignere Cipher
 void vignere_cipher(int n) {
     string encrypted, decrypted;
     string msg, keyword;
@@ -90,38 +91,76 @@ const string baconCipher[26] = {
 
 //** For Morse Cipher **
 // a map to store each letter corresponds to which morse combination
-map<char, string> encrypt = {
-        {'G',  "--."},{'H',  "...."},{'I',  ".."},
-        {'J',  ".---"},{'K',  "-.-"},{'L',  ".-.."},
-        {'M',  "--"},{'N',  "-."},{'O',  "---"},
-        {'P',  ".--."},{'Q',  "--.-"},{'R',  ".-."},
-        {'S',  "..."},{'T',  "-"},{'U',  "..-"},
-        {'V',  "...-"},{'W',  ".--"},{'X',  "-..-"},
-        {'Y',  "-.--"},{'Z',  "--.."},{'1',  ".----"},
-        {'2',  "..---"},{'3',  "...--"},{'4',  "....-"},
-        {'5',  "....."},{'6',  "-...."},{'7',  "--..."},
-        {'8',  "---.."},{'9',  "----."},{'0',  "-----"},
-        {',',  "--..--"},{':',  "---..."},{';',  "-.-.-."},
-        {'.',  ".-.-.-"},{'"',  ".-..-."},{'(',  "-----."},
-        {')',  ".-----"},{'\'', "-.--.-"},{'&', ".-..."},
-        {'@', ".--.-."},{'=', "-...-"},{'!', "-.-.--"},
-        {'.', ".-.-.-"},{'-', "-....-"},{'+', ".-.-."},
-        {'\"', ".-..-."},{'?', "..--.."},{'/', "-..-."},
+map<char, string> encryptMorse = {
+        {'A',  ".-"},
+        {'B',  "-..."},
+        {'C',  "-.-."},
+        {'D',  "-.."},
+        {'E',  "."},
+        {'F',  "..-."},
+        {'G',  "--."},
+        {'H',  "...."},
+        {'I',  ".."},
+        {'J',  ".---"},
+        {'K',  "-.-"},
+        {'L',  ".-.."},
+        {'M',  "--"},
+        {'N',  "-."},
+        {'O',  "---"},
+        {'P',  ".--."},
+        {'Q',  "--.-"},
+        {'R',  ".-."},
+        {'S',  "..."},
+        {'T',  "-"},
+        {'U',  "..-"},
+        {'V',  "...-"},
+        {'W',  ".--"},
+        {'X',  "-..-"},
+        {'Y',  "-.--"},
+        {'Z',  "--.."},
+        {'1',  ".----"},
+        {'2',  "..---"},
+        {'3',  "...--"},
+        {'4',  "....-"},
+        {'5',  "....."},
+        {'6',  "-...."},
+        {'7',  "--..."},
+        {'8',  "---.."},
+        {'9',  "----."},
+        {'0',  "-----"},
+        {',',  "--..--"},
+        {':',  "---..."},
+        {';',  "-.-.-."},
+        {'.',  ".-.-.-"},
+        {'"',  ".-..-."},
+        {'(',  "-----."},
+        {')',  ".-----"},
+        {'\'', "-.--.-"},
+        {'&',  ".-..."},
+        {'@',  ".--.-."},
+        {'=',  "-...-"},
+        {'!',  "-.-.--"},
+        {'.',  ".-.-.-"},
+        {'-',  "-....-"},
+        {'+',  ".-.-."},
+        {'\"', ".-..-."},
+        {'?',  "..--.."},
+        {'/',  "-..-."},
 
 };
 
 // a map to store each morse combination corresponds to which letter
-map<string, char> decrypt;
+map<string, char> decryptMorse;
 
-// initializing decrypt map from encrypt map
-void initialize_dectrpy_map() {
-    for (auto &it: encrypt) {
-        decrypt[it.second] = it.first;
+// initializing decryptMorse map from encryptMorse map
+void initialize_dectrptMorse_map() {
+    for (auto &it: encryptMorse) {
+        decryptMorse[it.second] = it.first;
     }
 }
 
 // Function to encode plaintext to Bacon Cipher
-string encodeBaconCipher(const string& plaintext) {
+string encodeBaconCipher(const string &plaintext) {
     string ciphertext = "";
     for (char c: plaintext) {
         if (isalpha(c)) { // If the character is alphabetic
@@ -135,11 +174,12 @@ string encodeBaconCipher(const string& plaintext) {
     }
     return ciphertext;
 }
+
 // Function to decode Bacon Cipher to plaintext
-string decodeBaconCipher(const string& ciphertext) {
+string decodeBaconCipher(const string &ciphertext) {
     string plaintext = "";
     string binary = "";
-    for (char c : ciphertext) {
+    for (char c: ciphertext) {
         if (c == 'a' || c == 'b') { // If the character is 'a' or 'b' (part of Bacon Cipher)
             binary += c; // Append 'a' or 'b' to binary sequence
             if (binary.size() == 5) { // If binary sequence is complete
@@ -161,8 +201,9 @@ string decodeBaconCipher(const string& ciphertext) {
     }
     return plaintext; // Return the decoded plaintext
 }
+
 // This function encrypts the message
-bool Encryption(string txt) {
+bool EncryptionMorse(string txt) {
     // store the new value
     string morse_text;
 
@@ -186,13 +227,13 @@ bool Encryption(string txt) {
                 morse_text += "   ";
 
             // if the character is not valid, return false and print the invalid character for the user
-        } else if (encrypt.find(ch) == encrypt.end()) {
+        } else if (encryptMorse.find(ch) == encryptMorse.end()) {
             cout << "Don't use \'" << ch << "\'\n";
             return false;
 
             // if the character is valid add its encryption
         } else
-            morse_text += encrypt[ch] + ' ';
+            morse_text += encryptMorse[ch] + ' ';
     }
 
     // remove the extra space at the end
@@ -206,7 +247,7 @@ bool Encryption(string txt) {
 }
 
 // This function decrypts the message
-bool Decryption(string txt) {
+bool DecryptionMorse(string txt) {
 
     // store the temporary substring of the morse code to be replaced
     string tmp;
@@ -238,12 +279,12 @@ bool Decryption(string txt) {
                 return false;
 
             // if the sequence is not valid, return false
-        } else if (decrypt.find(tmp) == decrypt.end())
+        } else if (decryptMorse.find(tmp) == decryptMorse.end())
             return false;
 
             // if the character is valid add its decryption
         else
-            original_text += decrypt[tmp];
+            original_text += decryptMorse[tmp];
 
         // empty the value of 'tmp'
         tmp = "";
@@ -292,11 +333,11 @@ void Cipher_menu() {
                 cout << "Enter your message: ";
                 cin.ignore();
 
-                // get the word to encrypt
+                // get the word to encryptMorse
                 getline(cin, input);
 
-                // The 'Encryption' function do the encryption process and return false if the input is invalid
-                if (!Encryption(input))
+                // The 'EncryptionMorse' function do the encryption process and return false if the input is invalid
+                if (!EncryptionMorse(input))
                     cout << "You have entered an invalid text for encryption!\n\n";
             }
         } else {//unexpected value
@@ -336,19 +377,19 @@ void deCipher_menu() {
                 cout << "Decoded text: " << decodedText << endl;
 
             } else if (choice == 3) {
-                decrypt.clear();
+                decryptMorse.clear();
 
-                // initialize the 'decrypt' map
-                initialize_dectrpy_map();
+                // initialize the 'decryptMorse' map
+                initialize_dectrptMorse_map();
                 string input;
                 cout << "Enter your message: ";
                 cin.ignore();
 
-                // get the word to decrypt
+                // get the word to decryptMorse
                 getline(cin, input);
 
-                // The 'Decryption' function do the decryption process and return false if the input is invalid
-                if (!Decryption(input))
+                // The 'DecryptionMorse' function do the decryption process and return false if the input is invalid
+                if (!DecryptionMorse(input))
                     cout << "You have entered an invalid text for decryption\n\n";
             } else
                 cout << "You have entered an invalid option, try again1!\n\n";

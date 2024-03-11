@@ -28,7 +28,7 @@ bool is_valid_key(string keyword) {
     return false;
 }
 
-//to encrypt or decrypt the message using Vignere Cipher
+//to encryptMorse or decryptMorse the message using Vignere Cipher
 void vignere_cipher(int n) {
     string encrypted, decrypted;
     string msg, keyword;
@@ -77,7 +77,7 @@ void vignere_cipher(int n) {
 }
 
 // a map to store each letter corresponds to which morse combination
-map<char, string> encrypt = {
+map<char, string> encryptMorse = {
         {'A',  ".-"},
         {'B',  "-..."},
         {'C',  "-.-."},
@@ -125,17 +125,17 @@ map<char, string> encrypt = {
 };
 
 // a map to store each morse combination corresponds to which letter
-map<string, char> decrypt;
+map<string, char> decryptMorse;
 
-// initializing decrypt map from encrypt map
-void initialize_dectrpy_map() {
-    for (auto &it: encrypt) {
-        decrypt[it.second] = it.first;
+// initializing decryptMorse map from encryptMorse map
+void initialize_dectrptMorse_map() {
+    for (auto &it: encryptMorse) {
+        decryptMorse[it.second] = it.first;
     }
 }
 
 // This function encrypts the message
-bool Encryption(string txt) {
+bool EncryptionMorse(string txt) {
     // store the new value
     string morse_text;
 
@@ -159,13 +159,13 @@ bool Encryption(string txt) {
                 morse_text += "   ";
 
             // if the character is not valid, return false and print the invalid character for the user
-        } else if (encrypt.find(ch) == encrypt.end()) {
+        } else if (encryptMorse.find(ch) == encryptMorse.end()) {
             cout << "Don't use \'" << ch << "\'\n";
             return false;
 
             // if the character is valid add its encryption
         } else
-            morse_text += encrypt[ch] + ' ';
+            morse_text += encryptMorse[ch] + ' ';
     }
 
     // remove the extra space at the end
@@ -177,7 +177,7 @@ bool Encryption(string txt) {
 }
 
 // This function decrypts the message
-bool Decryption(string txt) {
+bool DecryptionMorse(string txt) {
 
     // store the temporary substring of the morse code to be replaced
     string tmp;
@@ -209,12 +209,12 @@ bool Decryption(string txt) {
                 return false;
 
             // if the sequence is not valid, return false
-        } else if (decrypt.find(tmp) == decrypt.end())
+        } else if (decryptMorse.find(tmp) == decryptMorse.end())
             return false;
 
             // if the character is valid add its decryption
         else
-            original_text += decrypt[tmp];
+            original_text += decryptMorse[tmp];
 
         // empty the value of 'tmp'
         tmp = "";
@@ -256,11 +256,11 @@ void Cipher_menu() {
                 cout << "Enter your message: ";
                 cin.ignore();
 
-                // get the word to encrypt
+                // get the word to encryptMorse
                 getline(cin, input);
 
-                // The 'Encryption' function do the encryption process and return false if the input is invalid
-                if (!Encryption(input))
+                // The 'EncryptionMorse' function do the encryption process and return false if the input is invalid
+                if (!EncryptionMorse(input))
                     cout << "You have entered an invalid text for encryption!\n\n";
             }
         } else {//unexpected value
@@ -293,19 +293,19 @@ void deCipher_menu() {
             } else if (choice == 2) {
 
             } else if (choice == 3) {
-                decrypt.clear();
+                decryptMorse.clear();
 
-                // initialize the 'decrypt' map
-                initialize_dectrpy_map();
+                // initialize the 'decryptMorse' map
+                initialize_dectrptMorse_map();
                 string input;
                 cout << "Enter your message: ";
                 cin.ignore();
 
-                // get the word to decrypt
+                // get the word to decryptMorse
                 getline(cin, input);
 
-                // The 'Decryption' function do the decryption process and return false if the input is invalid
-                if (!Decryption(input))
+                // The 'DecryptionMorse' function do the decryption process and return false if the input is invalid
+                if (!DecryptionMorse(input))
                     cout << "You have entered an invalid text for decryption\n\n";
             } else
                 cout << "You have entered an invalid option, try again1!\n\n";
